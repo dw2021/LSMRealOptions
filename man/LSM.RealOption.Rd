@@ -2,7 +2,7 @@
 % Please edit documentation in R/Real-Options.R
 \name{LSM.RealOption}
 \alias{LSM.RealOption}
-\title{Value Capital Investment Projects Through LSM Simulation:}
+\title{Value Capital Investment Projects Through Least-Squares Monte Carlo (LSM) Simulation:}
 \usage{
 LSM.RealOption(state.variables, NCF, CAPEX, dt, rf, construction = 0,
   orthogonal = "Laguerre", degree = 9, cross.product = TRUE,
@@ -11,25 +11,26 @@ LSM.RealOption(state.variables, NCF, CAPEX, dt, rf, construction = 0,
 \arguments{
 \item{state.variables}{\code{matrix} or \code{array}. The simulated states of the underlying stochastic variables. The first dimension corresponds to the simulated values
 of the state variables at each discrete observation point. The second dimension corresponds to each individual simulation of the state variable. The third dimension
-corresponds to each state variable considered (if more than one state variable is considered).}
+corresponds to each state variable considered.}
 
 \item{NCF}{The net cash flows resulting from operating the underlying capital investment project for one discrete time step at the current simulated values of the state variables.
 Each column corresponds to a simulated price path of underlying stochastic variables, and each row the net cash flows at a discrete time point for each simulated path.
-The dimensions of object 'NFC' must match the first two dimensions of the object passed to the 'state.variables' argument.}
+The dimensions of object 'NCF' must match the first two dimensions of the object passed to the 'state.variables' argument.}
 
-\item{CAPEX}{The initial capital}
+\item{CAPEX}{\code{numeric} or \code{vector} object. The initial capital investment of the project. This value can be either constant or time dependent. When the 'CAPEX' argument
+is time dependent, it must be a vector object of length equal to the number of discrete observations of the simulations (i.e. the number of rows of both 'state.variables' and 'NCF')}
 
 \item{dt}{Constant, discrete time step of simulated observations}
 
 \item{rf}{The annual risk-free interest rate}
 
-\item{construction}{An integer corresponding to the number of periods of construction of the underlying asset. The construction time represents the time between
+\item{construction}{An \code{integer} corresponding to the number of periods of construction of the underlying asset. The construction time represents the time between
 the initial capital expenditure and when net cash flows are accrued, representing the construction time required of the investment project.}
 
-\item{orthogonal}{\code{character}. \code{character} The orthogonal polynomial used to approximate the continuation value of the option in the LSM simulation method.
-Orthogonal polynomial arguments available are: "Power", "Laguerre", "Jacobi", "Legendre", "Chebyshev", "Hermite". See \bold{details}.}
+\item{orthogonal}{\code{character}. The orthogonal polynomial used to develop basis functions that estimate the continuation value in the LSM simulation method.
+\code{orthogonal} arguments available are: "Power", "Laguerre", "Jacobi", "Legendre", "Chebyshev", "Hermite". See \bold{details}.}
 
-\item{degree}{The number of orthogonal polynomials used in the least squares fit. See \bold{details}.}
+\item{degree}{The number of orthogonal polynomials used in the least-squares fit. See \bold{details}.}
 
 \item{cross.product}{\code{logical}. Should a cross product of state variables be considered? Relevant only when the number of state variables
 is greater than one}
@@ -79,13 +80,13 @@ Given a set of state variables and associated net cash flows for an investment p
 solve for the real option value of a capital investment project through the least-squares Monte Carlo simulation method.
 }
 \details{
-The \code{LSM.RealOption} function provides an implementation of the least squares Monte Carlo (LSM) simulation approach to numerically approximate
+The \code{LSM.RealOption} function provides an implementation of the least-squares Monte Carlo (LSM) simulation approach to numerically approximate
 the value of capital investment projects considering the flexibility of timing of investment under stochastically evolving uncertainty. The function provides flexibility in the stochastic behavior of the underlying uncertainty, with simulated values
 of state variables provided within the \code{state.variables} argument. The \code{LSM.RealOption} function also provides analysis into the expected investment timing, probability, and the expected payback period of the project.
 
-\bold{Least Squares Monte Carlo Simulation:}
+\bold{Least-Squares Monte Carlo Simulation:}
 
-The Least Squares Monte Carlo (LSM) simulation method is a numeric approach first presented by Longstaff and Schwartz (2001) that
+The least-squares Monte Carlo (LSM) simulation method is a numeric approach first presented by Longstaff and Schwartz (2001) that
 approximates the value of options with early exercise opportunities. The LSM simulation method is considered one of the most efficient
 methods of valuing American-style options due to its flexibility and computational efficiency. The approach can feature multiple
 stochastically evolving underlying uncertainties, following both standard and exotic stochastic processes.
@@ -101,6 +102,7 @@ underlying, stochastically evolving uncertainty has revealed itself. Real option
 Real options analysis is also capable of evaluating the critical value of underlying state variables at which immediate investment into a project is optimal. See Dixit and Pindyck (1994) for more details of real options analysis.
 
 The \code{LSM.RealOption} function considers the option to invest into a capital investment project within a finite forecasting horizon. Investment into the project results in accruing all future net cash flows (NCF) until the end of the forecasting horizon at the cost of the capital expenditure (CAPEX).
+Immediate investment into a capital investment project is optimal when the waiting option value (WOV) is zero. Critical values of state variables at which immediate investment in optimal can therefore be obtained through finding the root of the WOV.
 
 The primary difference between the \code{LSM.RealOption} and \code{LSM.AmericanOption} function is the way in which they evaluate the payoff of
 exercise of the American-style option. The \code{LSM.AmericanOption} function considers the payoff of exercise to be a one time payoff (i.e. buying or selling the security in a vanilla call or put option) corresponding to the respective payoff argument.

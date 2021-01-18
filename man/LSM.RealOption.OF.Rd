@@ -2,7 +2,7 @@
 % Please edit documentation in R/Real-Options-OF.R
 \name{LSM.RealOption.OF}
 \alias{LSM.RealOption.OF}
-\title{Value Operationally Flexible Capital Investment Projects Through LSM Simulation:}
+\title{Value Operationally Flexible Capital Investment Projects Through Least-Squares Monte Carlo (LSM) Simulation:}
 \usage{
 LSM.RealOption.OF(state.variables, NCF, CAPEX, dt, rf, construction = 0,
   orthogonal = "Laguerre", degree = 9, cross.product = TRUE,
@@ -13,11 +13,11 @@ LSM.RealOption.OF(state.variables, NCF, CAPEX, dt, rf, construction = 0,
 \arguments{
 \item{state.variables}{\code{matrix} or \code{array}. The simulated states of the underlying stochastic variables. The first dimension corresponds to the simulated values
 of the state variables at each discrete observation point. The second dimension corresponds to each individual simulation of the state variable. The third dimension
-corresponds to each state variable considered (if more than one state variable is considered).}
+corresponds to each state variable considered.}
 
 \item{NCF}{The net cash flows resulting from operating the underlying capital investment project for one discrete time step at the current simulated values of the state variables.
 Each column corresponds to a simulated price path of underlying stochastic variables, and each row the net cash flows at a discrete time point for each simulated path.
-The dimensions of object 'NFC' must match the first two dimensions of the object passed to the 'state.variables' argument.}
+The dimensions of object 'NCF' must match the first two dimensions of the object passed to the 'state.variables' argument.}
 
 \item{CAPEX}{\code{numeric} or \code{vector} object. The initial capital investment of the project. This value can be either constant or time dependent. When the 'CAPEX' argument
 is time dependent, it must be a vector object of length equal to the number of discrete observations of the simulations (i.e. the number of rows of both 'state.variables' and 'NCF')}
@@ -29,21 +29,21 @@ is time dependent, it must be a vector object of length equal to the number of d
 \item{construction}{An integer corresponding to the number of periods of construction of the underlying asset. The construction time represents the time between
 the initial capital expenditure and when net cash flows are accrued, representing the construction time required of the investment project.}
 
-\item{orthogonal}{\code{character}. \code{character} The orthogonal polynomial used to approximate the continuation value of the option in the LSM simulation method.
-Orthogonal polynomial arguments available are: "Power", "Laguerre", "Jacobi", "Legendre", "Chebyshev", "Hermite". See \bold{details}.}
+\item{orthogonal}{\code{character}. The orthogonal polynomial used to develop basis functions that estimate the continuation value in the LSM simulation method.
+\code{orthogonal} arguments available are: "Power", "Laguerre", "Jacobi", "Legendre", "Chebyshev", "Hermite". See \bold{details}.}
 
-\item{degree}{The number of orthogonal polynomials used in the least squares fit. See \bold{details}.}
+\item{degree}{The number of orthogonal polynomials used in the least-squares fit. See \bold{details}.}
 
 \item{cross.product}{\code{logical}. Should a cross product of state variables be considered? Relevant only when the number of state variables
 is greater than one}
 
-\item{Suspend.CAPEX}{The capital, one time cash flow of suspending an operational project}
+\item{Suspend.CAPEX}{The cash flow resulting from suspending an operational project}
 
 \item{Suspend.OPEX}{the ongoing cash flow resulting from being suspended for one discrete time period}
 
-\item{Resume.CAPEX}{the capital, one time cash flow of resuming a suspended project}
+\item{Resume.CAPEX}{the cash flow resulting from resuming a suspended project}
 
-\item{Abandon.CAPEX}{the capital, one time cash flow of permanently abandoning a project}
+\item{Abandon.CAPEX}{the terminal cash flow resulting from permanently abandoning a project}
 
 \item{Save.States}{\code{logical}. Should the operational state of each simulated price path be returned? See \bold{values}.}
 
@@ -74,7 +74,6 @@ When \code{Save.States = TRUE}, an additional object is returned:
 When \code{verbose = T}, an additional 7 objects are returned within the \code{list} class object, providing further analysis
 into the capital investment project:
 \tabular{ll}{
-
 \code{ROV SE} \tab  The standard error of 'ROV'. \cr
 \code{NPV SE} \tab  The standard error of 'NPV'. \cr
 \code{WOV SE} \tab  The standard error of 'WOV'. \cr
@@ -87,7 +86,6 @@ into the capital investment project:
 When \code{debugging = T}, an additional 5 objects are returned within the \code{list} class object.
 These objects provide information about the values of individual simulated price paths:
 \tabular{ll}{
-
 \code{Investment Period} \tab The time of investment of invested price paths. Price paths that did not trigger investment are represented as \code{NA} \cr
 \code{Project Value} \tab The calculated project value at time zero for each simulated price path. The 'ROV' is equal to the mean of this vector. \cr
 \code{Immediate Profit} \tab The profit resulting from immediate investment for each discrete time period and for all simulated price paths  \cr
@@ -101,13 +99,14 @@ solve for the real option value of a capital investment project that has the fle
 through the least-squares Monte Carlo simulation method.
 }
 \details{
-The \code{LSM.RealOption.OF} function provides an implementation of the least squares Monte Carlo (LSM) simulation approach to numerically approximate
+The \code{LSM.RealOption.OF} function provides an implementation of the least-squares Monte Carlo (LSM) simulation approach to numerically approximate
 the value of capital investment projects considering the flexibility of timing of investment and operational states under stochastically evolving uncertainty. The function provides flexibility in the stochastic behavior of the underlying uncertainty, with simulated values
-of state variables provided within the \code{state.variables} argument. The \code{LSM.RealOption.OF} function also provides analysis into the expected investment timing, probability, and operating modes of the project.
+of state variables provided within the \code{state.variables} argument. Multiple stochastically evolving uncertainties can also be considered. The \code{LSM.RealOption.OF} function also provides analysis into the
+expected investment timing, probability, and operating modes of the project.
 
-\bold{Least Squares Monte Carlo Simulation:}
+\bold{Least-Squares Monte Carlo Simulation:}
 
-The Least Squares Monte Carlo (LSM) simulation method is a numeric approach first presented by Longstaff and Schwartz (2001) that
+The least-squares Monte Carlo (LSM) simulation method is a numeric approach first presented by Longstaff and Schwartz (2001) that
 approximates the value of options with early exercise opportunities. The LSM simulation method is considered one of the most efficient
 methods of valuing American-style options due to its flexibility and computational efficiency. The approach can feature multiple
 stochastically evolving underlying uncertainties, following both standard and exotic stochastic processes.
@@ -122,7 +121,8 @@ Real options analysis of investment projects considers the value of the option t
 underlying, stochastically evolving uncertainty has revealed itself. Real options analysis treats investment into capital investment projects as an optimal stopping problem, optimizing the timing of investment that maximizes the payoffs of investment under underlying stochastic uncertainty.
 Real options analysis is also capable of evaluating the critical value of underlying state variables at which immediate investment into a project is optimal. See Dixit and Pindyck (1994) for more details of real options analysis.
 
-The \code{LSM.RealOption.OF} function considers the option to invest into a capital investment project within a finite forecasting horizon. Investment into the project results in accruing all future net cash flows (NCF) until the end of the forecasting horizon at the cost of the capital expenditure (CAPEX).
+The \code{LSM.RealOption.OF} function considers the option to invest into a capital investment project within a finite forecasting horizon.
+Investment into the project results in accruing all future net cash flows (NCF) until the end of the forecasting horizon at the cost of the capital expenditure (CAPEX).
 
 The primary difference between the \code{LSM.RealOption} and \code{LSM.AmericanOption.OF} function is the way in which they evaluate the payoff of
 exercise of the American-style option. The \code{LSM.AmericanOption} function considers the payoff of exercise to be a one time payoff (i.e. buying or selling the security in a vanilla call or put option) corresponding to the respective payoff argument.
@@ -176,7 +176,7 @@ Generally, there is a cost of switching between operating modes (for example, sw
 resuming, or abandoning a project could be attributed to firing/hiring project employees, loss in perishable products and general cost
 of moving a project into a 'suspended' state. Operational expenditures of a suspended project could include maintenance to inactive
 machinery, preventing weathering of project sites, ongoing rent or utility payments, etc. Finally, the abandonment expenditure could
-even be negative, representing a 'scrap' value of the project that is returned as project assets are sold on abandonment of the project.
+be negative, representing a 'scrap' value of the project that is returned as project assets are sold on abandonment of the project.
 
 Solving for the value of an investment project with operational flexibilities is classified as an optimal switching or optimal control
 model. The objective is to optimize the value of the project by taking the optimal set of decisions for the project operating mode
@@ -184,7 +184,7 @@ at each time point under uncertainty.
 
 The 'LSM.RealOption.OF' function solves for the optimal switching problem at each discrete time point throughout the backward induction
 process. For each operating mode, the immediate payoff of switching to a different operating mode is compared against the discounted 'continuation' value
-of staying in the current operating mode. These continuation values are directly estimated through least squares regression of all simulated price paths (rather than just 'in-the-money' price paths, as is
+of staying in the current operating mode. These continuation values are directly estimated through least-squares regression of all simulated price paths (rather than just 'in-the-money' price paths, as is
 considered in the value of the option to delay the initial investment decision).
 
 The 'ROV' value of the investment project is then calculated by considering the option to invest into the 'operational' state. Investment into the project is optimal when the value of the 'operational' state is

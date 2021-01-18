@@ -2,7 +2,7 @@
 % Please edit documentation in R/American-Options.R
 \name{LSM.AmericanOption}
 \alias{LSM.AmericanOption}
-\title{Value American-Style Options Through Least Squares Monte Carlo (LSM) Simulation}
+\title{Value American-Style Options Through Least-Squares Monte Carlo (LSM) Simulation}
 \usage{
 LSM.AmericanOption(state.variables, payoff, K, dt, rf, call = FALSE,
   orthogonal = "Power", degree = 2, cross.product = TRUE,
@@ -11,12 +11,12 @@ LSM.AmericanOption(state.variables, payoff, K, dt, rf, call = FALSE,
 \arguments{
 \item{state.variables}{\code{matrix} or \code{array}. The simulated states of the underlying stochastic variables. The first dimension corresponds to the simulated values
 of the state variables at each discrete observation point. The second dimension corresponds to each individual simulation of the state variable. The third dimension
-corresponds to each state variable considered (if more than one state variable is considered).}
+corresponds to each state variable considered.}
 
 \item{payoff}{\code{matrix} The payoff at each observation point resulting from exercise into the underlying asset. The first dimension corresponds to the simulated values
 of the state variables at each discrete observation point. The second dimension corresponds to each individual simulation of the state variable.}
 
-\item{K}{the exercise price of the American option}
+\item{K}{the exercise price of the American-style option}
 
 \item{dt}{Constant, discrete time step of simulated observations}
 
@@ -24,18 +24,18 @@ of the state variables at each discrete observation point. The second dimension 
 
 \item{call}{\code{logical} Is the American-style option a call or put option?}
 
-\item{orthogonal}{\code{character}. \code{character} The orthogonal polynomial used to approximate the continuation value of the option in the LSM simulation method.
-Orthogonal polynomial arguments available are: "Power", "Laguerre", "Jacobi", "Legendre", "Chebyshev", "Hermite". See \bold{details}.}
+\item{orthogonal}{\code{character}. The orthogonal polynomial used to develop basis functions that estimate the continuation value in the LSM simulation method.
+\code{orthogonal} arguments available are: "Power", "Laguerre", "Jacobi", "Legendre", "Chebyshev", "Hermite". See \bold{details}.}
 
-\item{degree}{The number of orthogonal polynomials used in the least squares fit. See \bold{details}.}
+\item{degree}{The number of orthogonal polynomials used in the least-squares fit. See \bold{details}.}
 
 \item{cross.product}{\code{logical}. Should a cross product of state variables be considered? Relevant only when the number of state variables
-is greater than one}
+is greater than one.}
 
 \item{verbose}{\code{logical}. Should additional information be output? See \bold{values}.}
 }
 \value{
-The 'LSM.AmericanOption' function by default returns a \code{numeric} object corresponding to the calculated value of the American option.
+The 'LSM.AmericanOption' function by default returns a \code{numeric} object corresponding to the calculated value of the American-style option.
 
 When \code{verbose = T}, 6 objects are returned within a \code{list} class object. The objects returned are:
 
@@ -54,14 +54,14 @@ Given a set of state variables and associated payoffs simulated through Monte Ca
 the least-squares Monte Carlo simulation method.
 }
 \details{
-The \code{LSM.AmericanOption} function provides an implementation of the least squares Monte Carlo (LSM) simulation approach to numerically approximate
-the value of American put options. The function provides flexibility in the stochastic process followed by the underlying asset, with simulated values
-of stochastic processes provided within the \code{state.variables} argument. The \code{GBM.Simulate} function further simulates Geometric Brownian Motion process,
-the most common stochastic process for stocks and other assets. The \code{LSM.AmericanOption} also provides analysis into the exercise timing and probability of early exercise being triggered.
+The \code{LSM.AmericanOption} function provides an implementation of the least-squares Monte Carlo (LSM) simulation approach to numerically approximate
+the value of American-style options (options with early exercise opportunities). The function provides flexibility in the stochastic process followed by the underlying asset, with simulated values
+of stochastic processes provided within the \code{state.variables} argument. It also provides flexibility in the payoffs of the option, allowing for vanilla as well as more exotic options to be considered.
+\code{LSM.AmericanOption} also provides analysis into the exercise timing and probability of early exercise of the option.
 
-\bold{Least Squares Monte Carlo Simulation:}
+\bold{Least-Squares Monte Carlo Simulation:}
 
-The Least Squares Monte Carlo (LSM) simulation method is a numeric approach first presented by Longstaff and Schwartz (2001) that
+The least-squares Monte Carlo (LSM) simulation method is a numeric approach first presented by Longstaff and Schwartz (2001) that
 approximates the value of options with early exercise opportunities. The LSM simulation method is considered one of the most efficient
 methods of valuing American-style options due to its flexibility and computational efficiency. The approach can feature multiple
 stochastically evolving underlying uncertainties, following both standard and exotic stochastic processes.
@@ -71,7 +71,7 @@ then directly estimates the continuation value of in-the-money simulation paths 
 continuation on functions of the values of the state variables" (Longstaff and Schwartz, 2001).
 
 The 'LSM.AmericanOption' function at each discrete time period, for each simulated price path, compares the payoff that results from immediate exercise of
-the option with the expected value of continuing to the option for subsequent periods. The payoff of immediate exercise is provided in the \code{payoff} argument and
+the option with the expected value of continuing to hold the option for subsequent periods. The payoff of immediate exercise is provided in the \code{payoff} argument and
 could take several different meanings depending upon the type of American-style option being valued (e.g. the current stock price, the maximum price between multiple assets, etc.).
 
 The immediate profit resulting from exercise of the option is dependent upon the type of option being calculated. The profit of price path \eqn{i} and time \eqn{t}
@@ -101,11 +101,11 @@ available within the textbook of Abramowitz and Stegun (1965).
 # Price a vanilla American put option on an asset that follows
 # Geometric Brownian Motion
 
-### Simulate stock prices:
+## Step 1 - Simulate stock prices:
 StockPrices <- GBM.Simulate(n = 100, t = 1, mu = 0.05,
                          sigma = 0.2, S0 = 100, dt = 1/2)
 
-### Value an American put option:
+## Step 2 - Value the American put option:
 OptionValue <- LSM.AmericanOption(state.variables = StockPrices,
                                  payoff = StockPrices,
                                  K = 100,
