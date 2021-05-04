@@ -1,6 +1,6 @@
 Package: LSMRealOptions
 Title: Value American and Real Options Through LSM Simulation
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(person("Thomas", "Aspinall", email = "tomaspinall2512@gmail.com", 
                   role = c("aut", "cre"),
                   comment = c(ORCID = "0000-0002-6968-1989")),
@@ -19,7 +19,7 @@ Authors@R: c(person("Thomas", "Aspinall", email = "tomaspinall2512@gmail.com",
              person("Bruce", "Vanstone", email = "bvanston@bond.edu.au", 
                   role = c("aut"),
                   comment = c(ORCID = "0000-0002-3977-2468")) )
-Description: The least-squares Monte Carlo (LSM) simulation method is a popular method for the approximation of the value of early and multiple exercise options. 'LSMRealOptions' provides implementations of the LSM simulation method to value American option products and capital investment projects through real options analysis. 'LSMRealOptions' values capital investment projects with cash flows dependent upon underlying state variables that are stochasttically evolving, providing analysis into the timing and critical values at which investment is optimal. 'LSMRealOptions' provides flexibility in the stochastic processes followed by underlying assets, the number of state variables, basis functions and underlying asset characteristics to allow a broad range of assets to be valued through the LSM simulation method. Real options projects are further able to be valued whilst considering construction periods, time-varying initial capital expenditures and path-dependent operational flexibilities including the ability to temporarily shutdown or permanently abandon projects after initial investment has occurred. The LSM simulation method was first presented in the prolific work of Longstaff and Schwartz (2000) <doi:10.1093/rfs/14.1.113>.
+Description: The least-squares Monte Carlo (LSM) simulation method is a popular method for the approximation of the value of early and multiple exercise options. 'LSMRealOptions' provides implementations of the LSM simulation method to value American option products and capital investment projects through real options analysis. 'LSMRealOptions' values capital investment projects with cash flows dependent upon underlying state variables that are stochastically evolving, providing analysis into the timing and critical values at which investment is optimal. 'LSMRealOptions' provides flexibility in the stochastic processes followed by underlying assets, the number of state variables, basis functions and underlying asset characteristics to allow a broad range of assets to be valued through the LSM simulation method. Real options projects are further able to be valued whilst considering construction periods, time-varying initial capital expenditures and path-dependent operational flexibility including the ability to temporarily shutdown or permanently abandon projects after initial investment has occurred. The LSM simulation method was first presented in the prolific work of Longstaff and Schwartz (2001) <doi:10.1093/rfs/14.1.113>.
 Depends:
     R (>= 3.5.0)
 License: GPL-3
@@ -34,5 +34,7 @@ Suggests:
     scales,
     NFCP
 Imports:
-    stats
+    stats,
+    lifecycle
 VignetteBuilder: knitr
+RdMacros: lifecycle
