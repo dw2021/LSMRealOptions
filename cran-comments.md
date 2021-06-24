@@ -29,4 +29,4 @@ On windows-x86_64-devel (r-devel), ubuntu-gcc-release (r-release), fedora-clang-
 
 * 'NFCP' is a downstream dependency. I have run R CMD check, which passed with 0 errors, warnings and notes.
 
-* This is an update of an existing release (0.1.0 -> 0.2.0)
+* This is an update of an existing release (0.2.0 -> 0.2.1)
